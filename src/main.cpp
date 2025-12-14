@@ -1,8 +1,17 @@
+#ifndef DEBUG
+#include <windows.h>
+#endif
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
 
+#ifndef DEBUG
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+#else
 int main(void) {
+#endif
+
     GLFWwindow* window;
 
     if (!glfwInit())
