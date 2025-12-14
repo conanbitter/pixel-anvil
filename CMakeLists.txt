@@ -8,11 +8,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(INCLUDE_FILES
     messages.hpp
+    app.hpp
 )
 
 set(SRC_FILES
     main.cpp
     messages.cpp
+    app.cpp
 )
 
 set(EXTERNAL_FILES
