@@ -4,19 +4,29 @@ project(pixanv VERSION 0.1 LANGUAGES C CXX)
 
 set(EXECUTABLE_OUTPUT_PATH ./${CMAKE_BUILD_TYPE})
 
-set(SRC_FILES
-    src/main.cpp
-    external/glad/src/gl.c
+set(INCLUDE_FILES
 )
+
+set(SRC_FILES
+    main.cpp
+)
+
+set(EXTERNAL_FILES
+    glad/src/gl.c
+)
+
+list(TRANSFORM INCLUDE_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+list(TRANSFORM SRC_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+list(TRANSFORM EXTERNAL_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/external/)
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     # No console
-    add_executable(pixanv WIN32 ${SRC_FILES})
+    add_executable(pixanv WIN32 ${INCLUDE_FILES} ${SRC_FILES} ${EXTERNAL_FILES})
     # Static linking
     set_property(TARGET pixanv PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
 else()
     # With console
-    add_executable(pixanv ${SRC_FILES})
+    add_executable(pixanv ${INCLUDE_FILES} ${SRC_FILES} ${EXTERNAL_FILES})
     # DEBUG definition
     target_compile_definitions(pixanv PRIVATE DEBUG)
 endif()
