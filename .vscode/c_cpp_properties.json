@@ -12,7 +12,8 @@
                 "DEBUG"
             ],
             "windowsSdkVersion": "10.0.22000.0",
-            "compilerPath": "cl.exe"
+            "compilerPath": "cl.exe",
+            "cppStandard": "c++20"
         }
     ],
     "version": 4

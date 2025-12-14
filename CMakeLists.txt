@@ -4,15 +4,20 @@ project(pixanv VERSION 0.1 LANGUAGES C CXX)
 
 set(EXECUTABLE_OUTPUT_PATH ./${CMAKE_BUILD_TYPE})
 
+set(CMAKE_CXX_STANDARD 20)
+
 set(INCLUDE_FILES
+    messages.hpp
 )
 
 set(SRC_FILES
     main.cpp
+    messages.cpp
 )
 
 set(EXTERNAL_FILES
     glad/src/gl.c
+    tinyfiledialogs/tinyfiledialogs.c
 )
 
 list(TRANSFORM INCLUDE_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/include/)
@@ -33,8 +38,10 @@ endif()
 
 target_include_directories(pixanv
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
         external/glfw/include
         external/glad/include
+        external/tinyfiledialogs
 )
 
 target_link_directories(pixanv
