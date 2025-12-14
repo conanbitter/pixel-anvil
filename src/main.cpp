@@ -7,34 +7,39 @@
 #include <format>
 #include "messages.hpp"
 
-#ifndef DEBUG
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-#else
-int main(void) {
-#endif
+void run() {
     GLFWwindow* window;
 
-    if (!glfwInit())
-        return -1;
+    if (!glfwInit()) {
+        pixanv::msg::throwGLFWError();
+    }
 
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    if (!monitor) {
+        glfwTerminate();
+        pixanv::msg::throwGLFWError();
+    }
+
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    if (!mode) {
+        glfwTerminate();
+        pixanv::msg::throwGLFWError();
+    }
+
     glfwWindowHint(GLFW_POSITION_X, (mode->width - 640) / 2);
     glfwWindowHint(GLFW_POSITION_Y, (mode->height - 480) / 2);
 
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!window) {
-        pixanv::msg::error("Failed to load GLFW");
         glfwTerminate();
-        return -1;
+        pixanv::msg::throwGLFWError();
     }
 
     glfwMakeContextCurrent(window);
 
     int version = gladLoadGL(glfwGetProcAddress);
     if (version == 0) {
-        pixanv::msg::error("Failed to initialize OpenGL context");
-        return -1;
+        throw std::runtime_error("Failed to initialize OpenGL context");
     }
 
 #ifdef DEBUG
@@ -46,11 +51,27 @@ int main(void) {
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window); pixanv::msg::checkGLFWError();
 
-        glfwPollEvents();
+        glfwPollEvents(); pixanv::msg::checkGLFWError();
     }
 
     glfwTerminate();
+}
+
+#ifndef DEBUG
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+#else
+int main(void) {
+#endif
+    try {
+        run();
+    }
+    catch (const std::exception& e) {
+        pixanv::msg::error(e.what());
+    }
+    catch (...) {
+        pixanv::msg::error("Unknown error");
+    }
     return 0;
 }

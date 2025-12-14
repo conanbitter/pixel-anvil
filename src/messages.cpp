@@ -1,4 +1,6 @@
 #include "messages.hpp"
+#include <GLFW/glfw3.h>
+#include <format>
 
 #ifndef DEBUG
 
@@ -7,7 +9,6 @@
 #else
 
 #include <chrono>
-#include <format>
 #include <iostream>
 
 #endif
@@ -26,4 +27,32 @@ void pixanv::msg::info(const std::string& message) {
     const auto now = std::chrono::system_clock::now();
     std::cout << "[" << std::format("{:%d-%m-%Y %H:%M:%OS}", now) << "] Info: " << message << std::endl;
 #endif
+}
+
+void pixanv::msg::throwGLFWError() {
+    const char* description;
+    int code = glfwGetError(&description);
+
+    if (code != GLFW_NO_ERROR) {
+        if (description) {
+            throw std::runtime_error(std::format("{} (GLFW error code {})", description, code));
+        } else {
+            throw std::runtime_error(std::format("GLFW error code {}", code));
+        }
+    } else {
+        throw std::runtime_error("Unknown GLFW error");
+    }
+}
+
+void pixanv::msg::checkGLFWError() {
+    const char* description;
+    int code = glfwGetError(&description);
+
+    if (code != GLFW_NO_ERROR) {
+        if (description) {
+            throw std::runtime_error(std::format("{} (GLFW error code {})", description, code));
+        } else {
+            throw std::runtime_error(std::format("GLFW error code {}", code));
+        }
+    }
 }
