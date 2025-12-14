@@ -7,6 +7,9 @@
 #include <format>
 #include "messages.hpp"
 
+const int frameWidth = 640;
+const int frameHeight = 480;
+
 void run() {
     GLFWwindow* window;
 
@@ -26,14 +29,15 @@ void run() {
         pixanv::msg::throwGLFWError();
     }
 
-    glfwWindowHint(GLFW_POSITION_X, (mode->width - 640) / 2);
-    glfwWindowHint(GLFW_POSITION_Y, (mode->height - 480) / 2);
+    glfwWindowHint(GLFW_POSITION_X, (mode->width - frameWidth) / 2);
+    glfwWindowHint(GLFW_POSITION_Y, (mode->height - frameHeight) / 2);
 
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(frameWidth, frameHeight, "Pixel Anvil", NULL, NULL);
     if (!window) {
         glfwTerminate();
         pixanv::msg::throwGLFWError();
     }
+    glfwSetWindowSizeLimits(window, frameWidth, frameHeight, GLFW_DONT_CARE, GLFW_DONT_CARE); pixanv::msg::checkGLFWError();
 
     glfwMakeContextCurrent(window);
 
