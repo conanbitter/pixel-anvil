@@ -61,13 +61,13 @@ App& App::getInstance() {
     return theInstance;
 }
 
-void App::init(const std::string& title, int width, int height, int scale, bool use_integer_scaling) {
+void App::init(const std::string& title, int width, int height, int initial_scale, bool use_integer_scaling) {
     if (m_init_complete) return;
     m_integer_scaling = use_integer_scaling;
-    m_window = initWindow(title, width, height, scale);
+    m_window = initWindow(title, width, height, initial_scale);
     m_frame_width = width;
     m_frame_height = height;
-    resize(width * scale, height * scale);
+    resize(width * initial_scale, height * initial_scale);
     m_init_complete = true;
 }
 

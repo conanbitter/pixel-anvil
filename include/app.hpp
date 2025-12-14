@@ -15,12 +15,12 @@ namespace pixanv {
     public:
         static App& getInstance();
         ~App();
-        void init(const std::string& title, int width, int height, int initialScale = 1, bool useIntegerScaling = true);
+        void init(const std::string& title, int width, int height, int initial_scale = 1, bool use_integer_scaling = true);
         void run();
 
         void requestExit();
 
-        void setIntegerScaling(bool useIntegerScaling);
+        void setIntegerScaling(bool use_integer_scaling);
         bool getIntegerScaling() const { return m_integer_scaling; }
         void setScale(int scale);
 
@@ -42,7 +42,7 @@ namespace pixanv {
 
         GLFWwindow* m_window;
 
-        void resize(int newWidth, int newHeight);
+        void resize(int new_width, int new_height);
     };
 
 }
