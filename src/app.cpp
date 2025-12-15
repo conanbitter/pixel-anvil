@@ -5,6 +5,11 @@
 
 using namespace pixanv;
 
+static void pixanv::resizeCallback(GLFWwindow* window, int width, int height) {
+    App* app = (App*)glfwGetWindowUserPointer(window);
+    app->resize(width, height);
+}
+
 static void getScreenSize(int& width, int& height) {
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     if (!monitor) msg::throwGLFWError();
@@ -51,7 +56,6 @@ static GLFWwindow* initWindow(const std::string& title, int width, int height, i
 #endif
 
     glfwSwapInterval(1); msg::checkGLFWError();
-    glClearColor(0.09, 0.14, 0.16, 1.0);
 
     return window;
 }
@@ -65,8 +69,13 @@ void App::init(const std::string& title, int width, int height, int initial_scal
     if (m_init_complete) return;
     m_integer_scaling = use_integer_scaling;
     m_window = initWindow(title, width, height, initial_scale);
+    glfwSetWindowUserPointer(m_window, this);
+    glfwSetWindowSizeCallback(m_window, resizeCallback);
     m_frame_width = width;
     m_frame_height = height;
+
+    m_context.init(width, height);
+
     resize(width * initial_scale, height * initial_scale);
     m_init_complete = true;
 }
@@ -74,6 +83,7 @@ void App::init(const std::string& title, int width, int height, int initial_scal
 void App::resize(int new_width, int new_height) {
     m_window_width = new_width;
     m_window_height = new_height;
+    m_context.resize(new_width, new_height, 0, 0);
 }
 
 void App::run() {
@@ -82,6 +92,7 @@ void App::run() {
 
     while (!glfwWindowShouldClose(m_window) && m_running) {
         glClear(GL_COLOR_BUFFER_BIT);
+        m_context.present();
 
         glfwSwapBuffers(m_window); msg::checkGLFWError();
 
@@ -139,3 +150,4 @@ void App::setCursorMode(CursorMode mode) {
         break;
     }
 }
+

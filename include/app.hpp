@@ -4,6 +4,8 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
+#include "graphics.hpp"
+
 namespace pixanv {
     enum class CursorMode {
         Visible,
@@ -41,8 +43,11 @@ namespace pixanv {
         CursorMode m_cursor_mode;
 
         GLFWwindow* m_window;
+        GraphicsContext m_context;
 
         void resize(int new_width, int new_height);
+
+        friend void resizeCallback(GLFWwindow* window, int width, int height);
     };
 
 }
