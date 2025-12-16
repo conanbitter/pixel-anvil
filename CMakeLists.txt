@@ -10,6 +10,7 @@ set(INCLUDE_FILES
     messages.hpp
     app.hpp
     graphics.hpp
+    utils.hpp
 )
 
 set(SRC_FILES
@@ -17,6 +18,7 @@ set(SRC_FILES
     messages.cpp
     app.cpp
     graphics.cpp
+    utils.cpp
 )
 
 set(EXTERNAL_FILES
