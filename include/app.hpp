@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "graphics.hpp"
+#include "utils.hpp"
 
 namespace pixanv {
     enum class CursorMode {
@@ -29,16 +30,15 @@ namespace pixanv {
         void setCursorMode(CursorMode mode);
         CursorMode getCursorMode() const { return m_cursor_mode; };
     private:
-        App() : m_init_complete{ false }, m_running{ false }, m_frame_width{ 0 }, m_frame_height{ 0 }, m_window{ nullptr } {};
+        App() : m_init_complete{ false }, m_running{ false }, m_window{ nullptr } {};
         App(const App&) = delete;
         App& operator=(const App&) = delete;
 
         bool m_running;
         bool m_init_complete;
-        int m_frame_width;
-        int m_frame_height;
-        int m_window_width;
-        int m_window_height;
+        Size m_window_size;
+        Size m_frame_size;
+        Rect m_view;
         bool m_integer_scaling;
         CursorMode m_cursor_mode;
 

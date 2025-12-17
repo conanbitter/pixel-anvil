@@ -8,7 +8,7 @@ using namespace pixanv;
 
 static const char* vertex_shader_code = R"(
     #version 150
-    uniform vec2 scale;
+    uniform vec4 scale;
 
     in vec2 vert;
     in vec2 vertUV;
@@ -16,7 +16,7 @@ static const char* vertex_shader_code = R"(
     out vec2 fragUV;
 
     void main() {
-        gl_Position = vec4(vert.x*scale.x, vert.y*scale.y, 0.0, 1.0);
+        gl_Position = vec4(vert.x*scale.x+scale.z, vert.y*scale.y+scale.w, 0.0, 1.0);
         fragUV = vertUV;
     }
 )";
@@ -128,8 +128,8 @@ static GLuint initShaders(GLint& vertex_pos, GLint& vertex_uv, GLint& texture, G
     return program;
 }
 
-static void scaleShaders(GLint param, float x, float y) {
-    glUniform2f(param, x, y);
+static void scaleShaders(GLint param, const FRect& scale_data) {
+    glUniform4f(param, scale_data.width, scale_data.height, scale_data.x, scale_data.y);
 }
 
 #pragma endregion Shaders
@@ -170,16 +170,14 @@ void GraphicsContext::init(int width, int height) {
 
     glUseProgram(m_program);
     glUniform1i(tex_loc, 0);
-    scaleShaders(m_scale_uniform, 0.5f, 0.5f);
+    //scaleShaders(m_scale_uniform, 0.5f, 0.5f);
 
     glClearColor(0.09, 0.14, 0.16, 1.0);
 }
 
-void GraphicsContext::resize(int outer_width, int outer_height, int inner_width, int inner_height) {
-    glViewport(0, 0, outer_width, outer_height);
-    /*scaleShaders(m_scale_uniform,
-        (float)inner_width / (float)outer_width,
-        (float)inner_height / (float)outer_height);*/
+void GraphicsContext::resize(const Size& window_size, const FRect& scale_data) {
+    glViewport(0, 0, window_size.width, window_size.height);
+    scaleShaders(m_scale_uniform, scale_data);
 }
 
 void GraphicsContext::free() {

@@ -1,12 +1,13 @@
 #pragma once
 
 #include <glad/gl.h>
+#include "utils.hpp"
 
 namespace pixanv {
     class GraphicsContext {
     public:
         void init(int width, int height);
-        void resize(int outer_width, int outer_height, int inner_width, int inner_height);
+        void resize(const Size& window_size, const FRect& scale_data);
         void free();
         void present();
     private:

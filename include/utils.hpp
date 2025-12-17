@@ -7,6 +7,7 @@ namespace pixanv {
         int y;
 
         Vec2D(int x, int y) :x{ x }, y{ y } {}
+        Vec2D() :x{ 0 }, y{ 0 } {}
     };
 
     typedef Vec2D Point;
@@ -17,6 +18,7 @@ namespace pixanv {
         float y;
 
         FVec2D(float x, float y) :x{ x }, y{ y } {}
+        FVec2D() :x{ 0.0f }, y{ 0.0f } {}
     };
 
     typedef FVec2D FPoint;
@@ -27,6 +29,7 @@ namespace pixanv {
         int height;
 
         Size(int width, int height) :width{ width }, height{ height } {}
+        Size() :width{ 0 }, height{ 0 } {}
     };
 
     struct FSize
@@ -35,6 +38,7 @@ namespace pixanv {
         float height;
 
         FSize(float width, float height) :width{ width }, height{ height } {}
+        FSize() :width{ 0.0f }, height{ 0.0f } {}
     };
 
 
@@ -47,6 +51,7 @@ namespace pixanv {
 
         Rect(int x, int y, int width, int height) :x{ x }, y{ y }, width{ width }, height{ height } {}
         Rect(const Point& pos, const Size& size) :x{ pos.x }, y{ pos.y }, width{ size.width }, height{ size.height } {}
+        Rect() :x{ 0 }, y{ 0 }, width{ 0 }, height{ 0 } {}
 
         Point pos() const { return Point(x, y); }
         Size size() const { return Size(width, height); }
@@ -62,6 +67,7 @@ namespace pixanv {
 
         FRect(float x, float y, float width, float height) :x{ x }, y{ y }, width{ width }, height{ height } {}
         FRect(const FPoint& pos, const FSize& size) :x{ pos.x }, y{ pos.y }, width{ size.width }, height{ size.height } {}
+        FRect() :x{ 0.0f }, y{ 0.0f }, width{ 0.0f }, height{ 0.0f } {}
 
         FPoint pos() const { return FPoint(x, y); }
         FSize size() const { return FSize(width, height); }

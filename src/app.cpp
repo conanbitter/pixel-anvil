@@ -2,6 +2,7 @@
 #include "messages.hpp"
 #include <stdexcept>
 #include <format>
+//#include <algorithm>
 
 using namespace pixanv;
 
@@ -10,15 +11,14 @@ static void pixanv::resizeCallback(GLFWwindow* window, int width, int height) {
     app->resize(width, height);
 }
 
-static void getScreenSize(int& width, int& height) {
+static Size getScreenSize() {
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     if (!monitor) msg::throwGLFWError();
 
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     if (!mode) msg::throwGLFWError();
 
-    width = mode->width;
-    height = mode->height;
+    return Size(mode->width, mode->height);
 }
 
 static GLFWwindow* initWindow(const std::string& title, int width, int height, int scale) {
@@ -26,13 +26,10 @@ static GLFWwindow* initWindow(const std::string& title, int width, int height, i
         msg::throwGLFWError();
     }
 
-    int screen_width;
-    int screen_height;
+    Size screen_size = getScreenSize();
 
-    getScreenSize(screen_width, screen_height);
-
-    glfwWindowHint(GLFW_POSITION_X, (screen_width - width * scale) / 2);
-    glfwWindowHint(GLFW_POSITION_Y, (screen_height - height * scale) / 2);
+    glfwWindowHint(GLFW_POSITION_X, (screen_size.width - width * scale) / 2);
+    glfwWindowHint(GLFW_POSITION_Y, (screen_size.height - height * scale) / 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -71,8 +68,8 @@ void App::init(const std::string& title, int width, int height, int initial_scal
     m_window = initWindow(title, width, height, initial_scale);
     glfwSetWindowUserPointer(m_window, this);
     glfwSetWindowSizeCallback(m_window, resizeCallback);
-    m_frame_width = width;
-    m_frame_height = height;
+    m_frame_size.width = width;
+    m_frame_size.height = height;
 
     m_context.init(width, height);
 
@@ -81,9 +78,61 @@ void App::init(const std::string& title, int width, int height, int initial_scal
 }
 
 void App::resize(int new_width, int new_height) {
-    m_window_width = new_width;
-    m_window_height = new_height;
-    m_context.resize(new_width, new_height, 0, 0);
+    m_window_size.width = new_width;
+    m_window_size.height = new_height;
+
+    FRect shader_scale_data;
+
+    if (m_window_size.width % m_frame_size.width == 0 && m_window_size.height % m_frame_size.height == 0) {
+        shader_scale_data.x = 0.0;
+        shader_scale_data.y = 0.0;
+        shader_scale_data.width = 1.0f;
+        shader_scale_data.height = 1.0f;
+
+        m_view.x = 0;
+        m_view.y = 0;
+        m_view.width = new_width;
+        m_view.height = new_height;
+    } else if (m_integer_scaling) {
+        int iscale = std::min(new_width / m_frame_size.width, new_height / m_frame_size.height);
+
+        m_view.width = m_frame_size.width * iscale;
+        m_view.height = m_frame_size.height * iscale;
+        m_view.x = (new_width - m_view.width) / 2;
+        m_view.y = (new_height - m_view.height) / 2;
+
+        bool x_offset = (new_width - m_view.width * iscale) % 2 != 0;
+        bool y_offset = (new_height - m_view.height) % 2 != 0;
+        shader_scale_data.x = x_offset ? -1.0f / (float)new_width : 0.0f;
+        shader_scale_data.y = y_offset ? -1.0f / (float)new_height : 0.0f;
+        shader_scale_data.width = (float)m_view.width / (float)new_width;
+        shader_scale_data.height = (float)m_view.height / (float)new_height;
+    } else {
+        float window_ar = (float)new_width / (float)new_height;
+        float frame_ar = (float)m_frame_size.width / (float)m_frame_size.height;
+        if (frame_ar < window_ar) {
+            shader_scale_data.x = 0.0;
+            shader_scale_data.y = 0.0;
+            shader_scale_data.width = frame_ar / window_ar;
+            shader_scale_data.height = 1.0f;
+
+            m_view.width = (float)new_width * frame_ar;
+            m_view.height = new_height;
+            m_view.x = (new_width - m_view.width) / 2;
+            m_view.y = 0;
+        } else {
+            shader_scale_data.x = 0.0;
+            shader_scale_data.y = 0.0;
+            shader_scale_data.width = 1.0f;
+            shader_scale_data.height = window_ar / frame_ar;
+            m_view.width = new_height;
+            m_view.height = (float)new_height / frame_ar;
+            m_view.x = 0;
+            m_view.y = (new_height - m_view.height) / 2;
+        }
+    }
+
+    m_context.resize(m_window_size, shader_scale_data);
 }
 
 void App::run() {
@@ -110,26 +159,25 @@ void App::requestExit() {
 
 void App::setIntegerScaling(bool use_integer_scaling) {
     m_integer_scaling = use_integer_scaling;
-    if (m_init_complete) resize(m_window_width, m_window_height);
+    if (m_init_complete) resize(m_window_size.width, m_window_size.height);
 }
 
 void App::setScale(int scale) {
-    m_window_width = m_frame_width * scale;
-    m_window_height = m_frame_height * scale;
+    m_window_size.width = m_frame_size.width * scale;
+    m_window_size.height = m_frame_size.height * scale;
 
 
     if (glfwGetWindowAttrib(m_window, GLFW_MAXIMIZED)) {
         glfwRestoreWindow(m_window);
     }
 
-    glfwSetWindowSize(m_window, m_window_width, m_window_height);
+    glfwSetWindowSize(m_window, m_window_size.width, m_window_size.height);
 
-    int screen_width, screen_height;
-    getScreenSize(screen_width, screen_height);
+    Size screen_size = getScreenSize();
     glfwSetWindowPos(
         m_window,
-        (screen_width - m_window_width) / 2,
-        (screen_height - m_window_height) / 2
+        (screen_size.width - m_window_size.width) / 2,
+        (screen_size.height - m_window_size.height) / 2
     );
 }
 
