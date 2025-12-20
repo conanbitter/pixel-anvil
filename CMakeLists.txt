@@ -12,6 +12,7 @@ set(INCLUDE_FILES
     graphics.hpp
     utils.hpp
     image.hpp
+    resources.hpp
 )
 
 set(SRC_FILES
@@ -21,6 +22,7 @@ set(SRC_FILES
     graphics.cpp
     utils.cpp
     image.cpp
+    resources.cpp
 )
 
 set(EXTERNAL_FILES

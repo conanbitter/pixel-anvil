@@ -2,6 +2,7 @@
 
 #include "utils.hpp"
 #include <vector>
+#include <string>
 
 using std::vector;
 
@@ -29,4 +30,5 @@ namespace pixanv {
         Color pixelRaw(int x, int y) const;
     };
 
+    Image loadImage(const std::string& filename);
 }

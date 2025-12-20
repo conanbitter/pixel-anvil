@@ -1,4 +1,5 @@
 #include "image.hpp"
+#include "resources.hpp"
 
 using namespace pixanv;
 
@@ -25,4 +26,13 @@ Color Image::pixelRaw(int x, int y) const {
 
 void Image::fill(Color color) {
     std::fill(m_data.begin(), m_data.end(), color);
+}
+
+Image pixanv::loadImage(const std::string& filename)
+{
+    ResHandle handle(filename);
+    uint32_t width = handle.readU32();
+    uint32_t height = handle.readU32();
+
+    Image image(width, height);
 }
