@@ -30,7 +30,7 @@ static const char* fragment_shader_code = R"(
     out vec4 outputColor;
 
     void main() {
-        outputColor = vec4(1.0, 1.0, 1.0, 1.0); //vec4(texture(tex, fragUV).rgb, 1.0);
+        outputColor = vec4(texture(tex, fragUV).rgb, 1.0);
     }
 )";
 
@@ -166,7 +166,7 @@ void GraphicsContext::init(int width, int height) {
     glBindTexture(GL_TEXTURE_2D, m_frame_texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_SHORT_1_5_5_5_REV, nullptr);
 
     glUseProgram(m_program);
     glUniform1i(tex_loc, 0);
@@ -195,9 +195,9 @@ void GraphicsContext::free() {
     }
 }
 
-void GraphicsContext::present() {
+void GraphicsContext::present(const Image& source) {
     glBindTexture(GL_TEXTURE_2D, m_frame_texture);
-    //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ?width , ?height, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, ?data);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, source.m_width, source.m_height, GL_BGRA, GL_UNSIGNED_SHORT_1_5_5_5_REV, source.m_data.data());
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLES, 0, 6);

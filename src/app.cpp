@@ -57,11 +57,6 @@ static GLFWwindow* initWindow(const std::string& title, int width, int height, i
     return window;
 }
 
-App& App::getInstance() {
-    static App theInstance;
-    return theInstance;
-}
-
 void App::init(const std::string& title, int width, int height, int initial_scale, bool use_integer_scaling) {
     if (m_init_complete) return;
     m_integer_scaling = use_integer_scaling;
@@ -74,6 +69,8 @@ void App::init(const std::string& title, int width, int height, int initial_scal
     m_context.init(width, height);
 
     resize(width * initial_scale, height * initial_scale);
+
+    load();
     m_init_complete = true;
 }
 
@@ -140,8 +137,12 @@ void App::run() {
     m_running = true;
 
     while (!glfwWindowShouldClose(m_window) && m_running) {
+        update();
+
+        draw();
+
         glClear(GL_COLOR_BUFFER_BIT);
-        m_context.present();
+        m_context.present(gfx);
 
         glfwSwapBuffers(m_window); msg::checkGLFWError();
 

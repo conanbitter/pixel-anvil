@@ -16,7 +16,7 @@ namespace pixanv {
 
     class App {
     public:
-        static App& getInstance();
+        App() : m_init_complete{ false }, m_running{ false }, m_window{ nullptr } {};
         ~App();
         void init(const std::string& title, int width, int height, int initial_scale = 1, bool use_integer_scaling = true);
         void run();
@@ -29,8 +29,13 @@ namespace pixanv {
 
         void setCursorMode(CursorMode mode);
         CursorMode getCursorMode() const { return m_cursor_mode; };
+
+        Image gfx;
+
+        virtual void load() {}
+        virtual void update() {}
+        virtual void draw() {}
     private:
-        App() : m_init_complete{ false }, m_running{ false }, m_window{ nullptr } {};
         App(const App&) = delete;
         App& operator=(const App&) = delete;
 

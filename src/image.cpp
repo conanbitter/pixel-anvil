@@ -36,7 +36,7 @@ Image pixanv::Image::load(const std::string& filename)
 
     Image image(width, height);
 
-    if (handle.getSize() == (width + height + 4 * 2)) {
+    if (handle.getSize() == (width * height * 2 + 4 * 2)) {
         // Image has no transparency
         handle.readBlock(image.m_data.data(), sizeof(Color) * width * height);
         image.m_has_transparency = false;

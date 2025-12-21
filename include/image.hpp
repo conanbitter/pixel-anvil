@@ -20,6 +20,8 @@ namespace pixanv {
 
         int width() const { return m_width; };
         int height() const { return m_height; };
+
+        static Image load(const std::string& filename);
     protected:
         Image() :m_width(0), m_height(0), m_data(0), m_has_transparency(false) {};
         int m_width;
@@ -30,6 +32,7 @@ namespace pixanv {
         void pixelRaw(int x, int y, Color color);
         Color pixelRaw(int x, int y) const;
 
-        static Image load(const std::string& filename);
+        friend class GraphicsContext;
+        friend class App;
     };
 }

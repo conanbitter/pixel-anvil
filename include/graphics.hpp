@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/gl.h>
+#include "image.hpp"
 #include "utils.hpp"
 
 namespace pixanv {
@@ -9,7 +10,7 @@ namespace pixanv {
         void init(int width, int height);
         void resize(const Size& window_size, const FRect& scale_data);
         void free();
-        void present();
+        void present(const Image& source);
     private:
         GLuint m_program;
         GLuint m_vao;

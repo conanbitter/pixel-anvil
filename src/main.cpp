@@ -4,6 +4,16 @@
 
 #include "app.hpp"
 #include "messages.hpp"
+#include "image.hpp"
+
+class MyApp :public pixanv::App
+{
+public:
+    void load() override {
+        gfx = pixanv::Image::load("../../assets/bkg1.img");
+    }
+};
+
 
 #ifndef DEBUG
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -11,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 int main(void) {
 #endif
     try {
-        pixanv::App& app = pixanv::App::getInstance();
+        MyApp app;
         app.init("Pixel Anvil", 640, 360, 1, true);
         app.run();
     }
