@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace pixanv {
     struct Vec2D
     {
@@ -77,7 +79,7 @@ namespace pixanv {
     class Color {
     public:
         Color() :value(0) {}
-        Color(uint16_t raw) :value(raw) {}
+        Color(uint16_t raw) :value{ raw } {}
         Color(int r, int g, int b, int a);
         int r() const;
         int g() const;
@@ -92,6 +94,7 @@ namespace pixanv {
         static const Color CYAN;
         static const Color MAGENTA;
         static const Color YELLOW;
+        static const Color TRANSPARENT;
 
         bool operator==(const Color& rhs)const { return value == rhs.value; }
         Color operator*(const Color& rhs)const;

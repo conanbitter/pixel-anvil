@@ -72,5 +72,6 @@ const Color Color::BLUE = Color(0, 0, 31);
 const Color Color::CYAN = Color(0, 31, 31);
 const Color Color::MAGENTA = Color(31, 0, 31);
 const Color Color::YELLOW = Color(31, 31, 0);
+const Color Color::TRANSPARENT = Color(0);
 
 #pragma endregion Color

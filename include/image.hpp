@@ -28,7 +28,7 @@ namespace pixanv {
 
         void pixelRaw(int x, int y, Color color);
         Color pixelRaw(int x, int y) const;
-    };
 
-    Image loadImage(const std::string& filename);
+        static Image load(const std::string& filename);
+    };
 }

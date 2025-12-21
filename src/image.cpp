@@ -28,11 +28,30 @@ void Image::fill(Color color) {
     std::fill(m_data.begin(), m_data.end(), color);
 }
 
-Image pixanv::loadImage(const std::string& filename)
+Image pixanv::Image::load(const std::string& filename)
 {
     ResHandle handle(filename);
-    uint32_t width = handle.readU32();
-    uint32_t height = handle.readU32();
+    int width = handle.readU32();
+    int height = handle.readU32();
 
     Image image(width, height);
+
+    int length = width * height;
+    int index = 0;
+
+    while (index < length) {
+        uint8_t data1 = handle.readU8();
+        if (data1 < 128) {
+            for (int i = 0;i <= data1;i++) {
+                image.m_data[index] = Color::TRANSPARENT;
+                index++;
+            }
+        } else {
+            uint16_t data2 = ((uint16_t)data1) << 8 | handle.readU8();
+            image.m_data[index] = Color(data2);
+            index++;
+        }
+    }
+
+    return image;
 }
