@@ -30,6 +30,8 @@ void Image::fill(Color color) {
 
 Image pixanv::Image::load(const std::string& filename)
 {
+    const uint16_t MAX_TRANSP_COUNT = 1 << 15;
+
     ResHandle handle(filename);
     int width = handle.readU32();
     int height = handle.readU32();
@@ -37,7 +39,7 @@ Image pixanv::Image::load(const std::string& filename)
     Image image(width, height);
 
     if (handle.getSize() == (width * height * 2 + 4 * 2)) {
-        // Image has no transparency
+        // The image has no transparent pixels and is therefore not compressed
         handle.readBlock(image.m_data.data(), sizeof(Color) * width * height);
         image.m_has_transparency = false;
     } else {
@@ -45,15 +47,17 @@ Image pixanv::Image::load(const std::string& filename)
         int index = 0;
 
         while (index < length) {
-            uint8_t data1 = handle.readU8();
-            if (data1 < 128) {
-                for (int i = 0;i <= data1;i++) {
+            uint16_t pixel = handle.readU16();
+            if (pixel < MAX_TRANSP_COUNT) {
+                for (int i = 0;i <= pixel;i++) {
                     image.m_data[index] = Color::TRANSPARENT;
                     index++;
+                    if (index > length) {
+                        throw std::runtime_error("The image file is corrupted or have wrong format");
+                    }
                 }
             } else {
-                uint16_t data2 = ((uint16_t)data1) << 8 | handle.readU8();
-                image.m_data[index] = Color(data2);
+                image.m_data[index] = Color(pixel);
                 index++;
             }
         }

@@ -23,6 +23,12 @@ uint32_t ResHandle::readU32() {
     return data;
 }
 
+uint16_t ResHandle::readU16() {
+    uint16_t data;
+    m_handle.read(reinterpret_cast<char*>(&data), sizeof(data));
+    return data;
+}
+
 uint8_t ResHandle::readU8() {
     uint8_t data;
     m_handle.read(reinterpret_cast<char*>(&data), sizeof(data));

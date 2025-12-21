@@ -11,6 +11,7 @@ namespace pixanv {
 
         int32_t readI32();
         uint32_t readU32();
+        uint16_t readU16();
         uint8_t readU8();
 
         void readBlock(void* target, size_t size);

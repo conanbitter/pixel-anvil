@@ -10,7 +10,7 @@ class MyApp :public pixanv::App
 {
 public:
     void load() override {
-        gfx = pixanv::Image::load("../../assets/bkg1.img");
+        gfx = pixanv::Image::load("../../assets/other/transp1.img");
     }
 };
 
