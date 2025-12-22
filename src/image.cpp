@@ -3,6 +3,18 @@
 
 using namespace pixanv;
 
+Color Image::getPixel(int x, int y) const {
+    x %= m_width;
+    if (x < 0) x += m_width;
+    y %= m_height;
+    if (y < 0)y += m_height;
+    return m_data[x + y * m_width];
+}
+
+Color Image::getPixelRaw(int x, int y) const {
+    return m_data[x + y * m_width];
+}
+
 Image Image::load(const std::string& filename) {
     const uint16_t MAX_TRANSP_COUNT = 1 << 15;
 

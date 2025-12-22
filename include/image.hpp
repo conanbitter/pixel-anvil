@@ -15,6 +15,8 @@ namespace pixanv {
         Image(int width, int height) :m_width(width), m_height(height), m_data(width* height), m_has_transparency(true) {}
         bool isEmpty() const { return m_width == 0 || m_height == 0; }
 
+        Color getPixel(int x, int y) const;
+        Color getPixelRaw(int x, int y) const;
         int width() const { return m_width; };
         int height() const { return m_height; };
 
@@ -30,5 +32,6 @@ namespace pixanv {
 
         friend class GraphicsContext;
         friend class App;
+        friend class Canvas;
     };
 }
