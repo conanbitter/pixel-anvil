@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "graphics.hpp"
+#include "canvas.hpp"
 #include "utils.hpp"
 
 namespace pixanv {
@@ -30,7 +31,7 @@ namespace pixanv {
         void setCursorMode(CursorMode mode);
         CursorMode getCursorMode() const { return m_cursor_mode; };
 
-        Image gfx;
+        Canvas gfx;
 
         virtual void load() {}
         virtual void update() {}

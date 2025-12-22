@@ -14,6 +14,7 @@ set(INCLUDE_FILES
     utils.hpp
     image.hpp
     resources.hpp
+    canvas.hpp
 )
 
 set(SRC_FILES
@@ -24,6 +25,7 @@ set(SRC_FILES
     utils.cpp
     image.cpp
     resources.cpp
+    canvas.cpp
 )
 
 set(EXTERNAL_FILES

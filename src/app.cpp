@@ -70,6 +70,8 @@ void App::init(const std::string& title, int width, int height, int initial_scal
 
     resize(width * initial_scale, height * initial_scale);
 
+    gfx.resize(width, height);
+
     load();
     m_init_complete = true;
 }

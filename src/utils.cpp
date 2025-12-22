@@ -15,7 +15,7 @@ bool Rect::contains(const Point& point)
 
 #pragma region Color
 
-Color::Color(int r, int g, int b, int a = 1)
+Color::Color(int r, int g, int b, int a)
 {
     a = std::clamp(a, 0, 1);
     r = std::clamp(r, 0, 0b11111);

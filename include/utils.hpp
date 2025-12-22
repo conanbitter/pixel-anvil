@@ -80,7 +80,7 @@ namespace pixanv {
     public:
         Color() :value(0) {}
         Color(uint16_t raw) :value{ raw } {}
-        Color(int r, int g, int b, int a);
+        Color(int r, int g, int b, int a = 1);
         int r() const;
         int g() const;
         int b() const;

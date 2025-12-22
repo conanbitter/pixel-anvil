@@ -11,19 +11,15 @@ namespace pixanv {
     class Image
     {
     public:
+        Image() :m_width(0), m_height(0), m_data(0), m_has_transparency(false) {};
         Image(int width, int height) :m_width(width), m_height(height), m_data(width* height), m_has_transparency(true) {}
         bool isEmpty() const { return m_width == 0 || m_height == 0; }
-
-        void pixel(int x, int y, Color color);
-        Color pixel(int x, int y) const;
-        void fill(Color color);
 
         int width() const { return m_width; };
         int height() const { return m_height; };
 
         static Image load(const std::string& filename);
     protected:
-        Image() :m_width(0), m_height(0), m_data(0), m_has_transparency(false) {};
         int m_width;
         int m_height;
         vector<Color> m_data;
