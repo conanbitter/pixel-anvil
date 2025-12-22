@@ -6,7 +6,6 @@
 
 #include "graphics.hpp"
 #include "canvas.hpp"
-#include "utils.hpp"
 
 namespace pixanv {
     enum class CursorMode {

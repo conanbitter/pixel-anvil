@@ -2,7 +2,7 @@
 
 #include <glad/gl.h>
 #include "image.hpp"
-#include "utils.hpp"
+#include "geometry.hpp"
 
 namespace pixanv {
     class GraphicsContext {

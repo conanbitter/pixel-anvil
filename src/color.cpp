@@ -1,19 +1,9 @@
-#include "utils.hpp"
+#include "color.hpp"
+
 #include <cmath>
 #include <algorithm>
 
 using namespace pixanv;
-
-bool Rect::contains(const Point& point)
-{
-    return
-        point.x >= x &&
-        point.y >= y &&
-        point.x < x + width &&
-        point.y < y + height;
-}
-
-#pragma region Color
 
 Color::Color(int r, int g, int b, int a)
 {
@@ -73,5 +63,3 @@ const Color Color::CYAN = Color(0, 31, 31);
 const Color Color::MAGENTA = Color(31, 0, 31);
 const Color Color::YELLOW = Color(31, 31, 0);
 const Color Color::TRANSPARENT = Color(0);
-
-#pragma endregion Color

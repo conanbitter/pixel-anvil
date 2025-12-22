@@ -5,7 +5,7 @@
 #include "app.hpp"
 #include "messages.hpp"
 #include "image.hpp"
-#include "utils.hpp"
+#include "color.hpp"
 
 class MyApp :public pixanv::App
 {

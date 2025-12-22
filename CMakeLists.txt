@@ -11,7 +11,8 @@ set(INCLUDE_FILES
     messages.hpp
     app.hpp
     graphics.hpp
-    utils.hpp
+    geometry.hpp
+    color.hpp
     image.hpp
     resources.hpp
     canvas.hpp
@@ -22,7 +23,8 @@ set(SRC_FILES
     messages.cpp
     app.cpp
     graphics.cpp
-    utils.cpp
+    color.cpp
+    geometry.cpp
     image.cpp
     resources.cpp
     canvas.cpp
