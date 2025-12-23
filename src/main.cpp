@@ -13,6 +13,11 @@ class MyApp :public pixanv::App
 public:
     MyApp() {}
 
+    void load() override {
+        sprite = pixanv::Image::load("../../assets/other/transp1.img");
+        opaq = pixanv::Image::load("../../assets/pic1.img");
+    }
+
     void update() override {
         if (isKeyDown(pixanv::Key::Right)) {
             x++;
@@ -26,27 +31,29 @@ public:
         if (isKeyDown(pixanv::Key::Up)) {
             y--;
         }
-    }
 
-    void load() override {
-        sprite = pixanv::Image::load("../../assets/other/transp1.img");
-        opaq = pixanv::Image::load("../../assets/pic1.img");
+        col_mul += col_mul_d;
+        if (col_mul <= 0.0 || col_mul >= 33.0) {
+            col_mul_d = -col_mul_d;
+        }
     }
 
     void draw() override {
-        gfx.fill(pixanv::Color(15, 20, 15));
-        gfx.putPixel(1, 1, pixanv::Color::WHITE);
+        fill(pixanv::Color(15, 20, 15));
+        putPixel(1, 1, pixanv::Color::WHITE);
         for (int i = 0;i < 360;i++) {
-            gfx.putPixel(i, 360 - i - 1, pixanv::Color(10, 5, 5));
+            putPixel(i, 360 - i - 1, pixanv::Color(10, 5, 5));
         }
-        gfx.blit(opaq, 10, 10, pixanv::Color(28, 31, 28));
-        gfx.blit(sprite, x, y, pixanv::Color(20, 20, 20));
+        blit(opaq, 10, 10, pixanv::Color(28, 31, 28));
+        blit(sprite, x, y, pixanv::Color(col_mul, col_mul, col_mul));
     }
 private:
     pixanv::Image sprite;
     pixanv::Image opaq;
     int x = 300;
     int y = 100;
+    float col_mul = 31.0;
+    float col_mul_d = -0.2;
 };
 
 

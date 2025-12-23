@@ -36,7 +36,11 @@ namespace pixanv {
         bool isKeyPressed(Key key) const { return m_keys_pressed.contains(key); }
         bool isKeyReleased(Key key) const { return m_keys_released.contains(key); }
 
-        Canvas gfx;
+        Color getPixel(int x, int y) const { m_canvas.getPixel(x, y); }
+        void putPixel(int x, int y, Color color) { m_canvas.putPixel(x, y, color); };
+        void blit(const Image& src, int x, int y, Color color = Color::WHITE) { m_canvas.blit(src, x, y, color); }
+        void blit(const Image& src, int x, int y, const Rect& src_rect, Color color = Color::WHITE) { m_canvas.blit(src, x, y, src_rect, color); }
+        void fill(Color color) { m_canvas.fill(color); }
 
         virtual void load() {}
         virtual void update() {}
@@ -55,6 +59,7 @@ namespace pixanv {
 
         GLFWwindow* m_window;
         GraphicsContext m_context;
+        Canvas m_canvas;
 
         std::unordered_set<Key> m_keys_down;
         std::unordered_set<Key> m_keys_pressed;

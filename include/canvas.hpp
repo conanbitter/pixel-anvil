@@ -10,9 +10,7 @@ namespace pixanv {
     public:
 
         void putPixel(int x, int y, Color color);
-        Color getPixel(int x, int y) const;
         void putPixelRaw(int x, int y, Color color);
-        Color getPixelRaw(int x, int y) const;
 
         void blit(const Image& src, int x, int y, Color color = Color::WHITE);
         void blit(const Image& src, int x, int y, const Rect& src_rect, Color color = Color::WHITE);

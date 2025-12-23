@@ -79,7 +79,7 @@ void App::init(const std::string& title, int width, int height, int initial_scal
 
     resize(width * initial_scale, height * initial_scale);
 
-    gfx.resize(width, height);
+    m_canvas.resize(width, height);
 
     load();
     m_init_complete = true;
@@ -154,7 +154,7 @@ void App::run() {
         draw();
 
         glClear(GL_COLOR_BUFFER_BIT);
-        m_context.present(gfx);
+        m_context.present(m_canvas);
 
         glfwSwapBuffers(m_window); msg::checkGLFWError();
 
