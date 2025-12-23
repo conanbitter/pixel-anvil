@@ -16,6 +16,7 @@ set(INCLUDE_FILES
     image.hpp
     resources.hpp
     canvas.hpp
+    keys.hpp
 )
 
 set(SRC_FILES

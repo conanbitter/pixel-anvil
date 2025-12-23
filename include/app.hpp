@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 #include "graphics.hpp"
 #include "canvas.hpp"
+#include "keys.hpp"
 
 namespace pixanv {
     enum class CursorMode {
@@ -30,6 +32,10 @@ namespace pixanv {
         void setCursorMode(CursorMode mode);
         CursorMode getCursorMode() const { return m_cursor_mode; };
 
+        bool isKeyDown(Key key) const { return m_keys_down.contains(key); }
+        bool isKeyPressed(Key key) const { return m_keys_pressed.contains(key); }
+        bool isKeyReleased(Key key) const { return m_keys_released.contains(key); }
+
         Canvas gfx;
 
         virtual void load() {}
@@ -50,9 +56,16 @@ namespace pixanv {
         GLFWwindow* m_window;
         GraphicsContext m_context;
 
+        std::unordered_set<Key> m_keys_down;
+        std::unordered_set<Key> m_keys_pressed;
+        std::unordered_set<Key> m_keys_released;
+
         void resize(int new_width, int new_height);
+        void keyAction(Key key, bool down);
+        void keyClear();
 
         friend void resizeCallback(GLFWwindow* window, int width, int height);
+        friend void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     };
 
 }

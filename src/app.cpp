@@ -11,6 +11,14 @@ static void pixanv::resizeCallback(GLFWwindow* window, int width, int height) {
     app->resize(width, height);
 }
 
+static void pixanv::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS || action == GLFW_RELEASE) {
+        App* app = (App*)glfwGetWindowUserPointer(window);
+        app->keyAction(static_cast<Key>(key), action == GLFW_PRESS);
+    }
+}
+
 static Size getScreenSize() {
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     if (!monitor) msg::throwGLFWError();
@@ -63,6 +71,7 @@ void App::init(const std::string& title, int width, int height, int initial_scal
     m_window = initWindow(title, width, height, initial_scale);
     glfwSetWindowUserPointer(m_window, this);
     glfwSetWindowSizeCallback(m_window, resizeCallback);
+    glfwSetKeyCallback(m_window, keyCallback);
     m_frame_size.width = width;
     m_frame_size.height = height;
 
@@ -140,6 +149,7 @@ void App::run() {
 
     while (!glfwWindowShouldClose(m_window) && m_running) {
         update();
+        keyClear();
 
         draw();
 
@@ -202,3 +212,21 @@ void App::setCursorMode(CursorMode mode) {
     }
 }
 
+void App::keyAction(Key key, bool down) {
+    if (down) {
+        if (!m_keys_down.contains(key)) {
+            m_keys_pressed.insert(key);
+            m_keys_down.insert(key);
+        }
+    } else {
+        if (m_keys_down.contains(key)) {
+            m_keys_released.insert(key);
+            m_keys_down.erase(key);
+        }
+    }
+}
+
+void App::keyClear() {
+    m_keys_pressed.clear();
+    m_keys_released.clear();
+}
